@@ -14,7 +14,7 @@ function dragula (containers, options) {
   var _offsetY; // reference y
 
   var o = options || {};
-  if (o.accepts === void 0) { o.accepts = always; }
+  if (o.accepts === void 0) { o.accepts = always; } // void 0 means undefined
   if (o.copy === void 0) { o.copy = false; }
   if (o.direction === void 0) { o.direction = 'vertical'; }
 
@@ -22,13 +22,13 @@ function dragula (containers, options) {
     destroy: destroy
   });
 
-  events();
+  events(); // the arg can be undefined
 
   return api;
 
-  function events (remove) {
+  function events (remove) { // add or remove listener
     var op = remove ? 'remove' : 'add';
-    crossvent[op](documentElement, 'mouseup', release);
+    crossvent[op](documentElement, 'mouseup', release); // mouseup: drag to where
     containers.forEach(track);
 
     function track (container) {
@@ -42,7 +42,7 @@ function dragula (containers, options) {
   }
 
   function grab (e) {
-    if (e.which !== 1 || e.metaKey || e.ctrlKey) {
+    if (e.which !== 1 || e.metaKey || e.ctrlKey) { // e.which: left_click->1, right_click->3
       return; // we only care about honest-to-god left clicks
     }
     if (_dragging) {
@@ -194,7 +194,8 @@ function getOffset (el) {
   var rect = el.getBoundingClientRect();
   return {
     left: rect.left + body.scrollLeft,
-    top: rect.top + body.scrollTop
+    top: rect.top + body.scrollTop // !!!! this is problematic
+    // should use (document.documentElement || document.body.parentNode || document.body).scrollLeft
   };
 }
 

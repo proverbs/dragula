@@ -15,6 +15,7 @@ function dragula (containers, options) {
   var _offsetY; // reference y
 
   var o = options || {};
+  // void 0 means undefined
   if (o.accepts === void 0) { o.accepts = always; }
   if (o.copy === void 0) { o.copy = false; }
   if (o.direction === void 0) { o.direction = 'vertical'; }
@@ -29,6 +30,7 @@ function dragula (containers, options) {
 
   function events (remove) {
     var op = remove ? 'remove' : 'add';
+    console.log(crossvent);
     crossvent[op](documentElement, 'mouseup', release);
     containers.forEach(track);
 
@@ -43,6 +45,7 @@ function dragula (containers, options) {
   }
 
   function grab (e) {
+    // console.log(e.which);
     if (e.which !== 1 || e.metaKey || e.ctrlKey) {
       return; // we only care about honest-to-god left clicks
     }
@@ -55,6 +58,7 @@ function dragula (containers, options) {
       return; // don't drag container itself
     }
     while (containers.indexOf(item.parentElement) === -1) {
+      console.log("fuck");
       if (invalidTarget(item)) {
         return;
       }
@@ -68,6 +72,7 @@ function dragula (containers, options) {
 
     var container = item.parentElement;
     var offset = getOffset(item);
+    console.log(offset);
 
     if (o.copy === false) {
       addClass(item, 'gu-concealed');
@@ -193,9 +198,16 @@ function dragula (containers, options) {
 
 function getOffset (el) {
   var rect = el.getBoundingClientRect();
+  console.log('body:' + document.body.scrollTop);
+  console.log('parentNode:' + document.body.parentElement.scrollTop);
+  console.log('documentElement:' + document.documentElement.scrollTop);
+  console.log(document);
+  console.log(document.documentElement);
+  console.log((document.documentElement || document.body.parentNode || document.body));
+
   return {
-    left: rect.left + body.scrollLeft,
-    top: rect.top + body.scrollTop
+    left: rect.left + (document.documentElement || document.body.parentNode || document.body).scrollLeft,
+    top: rect.top + (document.documentElement || document.body.parentNode || document.body).scrollTop
   };
 }
 
